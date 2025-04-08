@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #3b3b39;
+  color: white;
+  display: flex;
+  justify-content: center;
+}
+
+h1 {
+  text-align: center;
+  font-family: cursive !important;
+}
+
+.question {
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: #2c3e50; 
+  width: 100%;
+}
+
+.question::before,
+.question::after {
+  content: '';
+  display: block;
+  height: 2px;
+  background-color: #428bca; 
+  margin: 10px 0;
+}
+
+.options {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.option {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  background-color: #2980b9;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%;
+}
+
+.option:hover {
+  background-color: #3498db;
+  transform: scale(1.05);
+}
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #428bca;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+  margin-right: 10px;
+  margin-bottom: 50px;
+}
+
+.button:hover {
+  background-color: #3071a9;
+}
+
+.result {
+  text-align: center;
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.hide{
+  display: none;
+}
+.incorrect-ans{
+    color: red;
+}
+.correct-ans {
+    color: green;
+}
+.incoreect-ans-heading{
+    color: peru;
+    font-family: bold;
+    font-size: 30px;
+}
+.score{
+    text-align: center;
+}
+.timer{
+  color: red;
+  text-align: center;
+  padding-top: 40px;
+  font-size: 37px;
+}
