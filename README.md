@@ -21,10 +21,10 @@ An interactive frontend quiz application built using **HTML**, **CSS**, and **Ja
 ```bash
 git clone https://github.com/Sravanikonapalli/interactive-wuiz-app.git
 cd interactive-wuiz-app
+```
 
 **Run the App Locally**
 Open the project folder in VS Code
-
 Click on "Go Live" at the bottom-right corner
 (requires the Live Server extension)
 
