@@ -32,7 +32,6 @@ Click on "Go Live" at the bottom-right corner
 
 ## 📺 Watch it in Action
 
-- 🎥 [Watch Live Demo Video](https://drive.google.com/file/d/1cgSMbYTCY62mlU29_tMMg1Xeq4rh2-8W/view?usp=sharing)
 - 🌐 [Live Demo on Vercel](https://interactive-wuiz-app.vercel.app/)
 
 -----
