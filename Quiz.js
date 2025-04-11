@@ -1,3 +1,4 @@
+//questions data
 const quizQuestions = [
   {
     question: "What does HTML stand for?",
@@ -49,38 +50,46 @@ const quizQuestions = [
     options: ["opacity", "transparency", "visibility", "alpha"],
     answer: "opacity"
   }
-]
+];
 
+//DOM elements
+const startContainer = document.getElementById('start-container');
+const startButton = document.getElementById('start-quiz');
 const quizContainer = document.getElementById('quiz');
 const resultContainer = document.getElementById('result');
-const submitButton = document.getElementById('submit');
 const retryButton = document.getElementById('retry');
 const showAnswerButton = document.getElementById('showAnswer');
-const timerElement=document.getElementById('time');
+const timerElement = document.getElementById('time');
+const quizHeading = document.getElementById('quiz-heading');
+const timerContainer = document.getElementById('timer-container');
+const nextButton = document.getElementById('next');
+
 let currentQuestion = 0;
 let score = 0;
 let incorrectAnswers = [];
-let timeLeft=420;
+let timeLeft = 420;
 let timeInterval;
 
 function startTimer() {
-  clearInterval(timeInterval);
-  timeInterval=setInterval(()=>{
+  clearInterval(timeInterval); // Prevent multiple intervals
+  timeInterval = setInterval(() => {
     timeLeft--;
-    timerElement.textContent=formatTime(timeLeft);
-    if (timeLeft<=0) {
-      alert("Time is up! Restarting the quiz...")
+    timerElement.textContent = formatTime(timeLeft);
+    if (timeLeft <= 0) {
+      alert("Time is up! Restarting the quiz...");
       retryQuiz();
     }
-  },1000);
+  }, 1000);
 }
 
+//convert seconds into mm:ss
 function formatTime(sec) {
-  let minutes=Math.floor(sec/60);
-  let seconds=sec%60;
-  return `${minutes}m:${seconds<10?"0":""}${seconds}s`;
+  let minutes = Math.floor(sec / 60);
+  let seconds = sec % 60;
+  return `${minutes}m:${seconds < 10 ? "0" : ""}${seconds}s`;
 }
 
+//Shuffle options to prevent fixed ordering
 function shuffleArray(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -88,12 +97,12 @@ function shuffleArray(array) {
   }
 }
 
+//Display current question and shuffled options
 function displayQuestion() {
   const questionData = quizQuestions[currentQuestion];
-
   const questionElement = document.createElement('div');
   questionElement.className = 'question';
-  questionElement.innerHTML = `${currentQuestion + 1} :   ${questionData.question}`;
+  questionElement.innerHTML = `${currentQuestion + 1} : ${questionData.question}`;
 
   const optionsElement = document.createElement('div');
   optionsElement.className = 'options';
@@ -110,19 +119,36 @@ function displayQuestion() {
     radio.name = 'quiz';
     radio.value = shuffledOptions[i];
 
-    const optionText = document.createTextNode(shuffledOptions[i]);
+    //Instant feedback on option selection
+    radio.addEventListener('change', () => {
+      const correct = quizQuestions[currentQuestion].answer;
+      const allLabels = document.querySelectorAll('.option');
+      allLabels.forEach(label => {
+        const input = label.querySelector('input');
+        if (input.value === correct) {
+          label.classList.add('correct');
+        } else if (input.checked) {
+          label.classList.add('incorrect');
+        }
+        input.disabled = true;
+      });
+      nextButton.classList.remove('hide');
+    });
 
+    const optionText = document.createTextNode(shuffledOptions[i]);
     option.appendChild(radio);
     option.appendChild(optionText);
     optionsElement.appendChild(option);
   }
 
+  // Replace old content with new
   quizContainer.innerHTML = '';
   quizContainer.appendChild(questionElement);
   quizContainer.appendChild(optionsElement);
 }
 
-function checkAnswer() {
+//next button handler
+nextButton.addEventListener('click', () => {
   const selectedOption = document.querySelector('input[name="quiz"]:checked');
   if (selectedOption) {
     const answer = selectedOption.value;
@@ -136,60 +162,64 @@ function checkAnswer() {
       });
     }
     currentQuestion++;
-    selectedOption.checked = false;
+    nextButton.classList.add('hide');
     if (currentQuestion < quizQuestions.length) {
       displayQuestion();
     } else {
       displayResult();
     }
   }
-}
+});
 
+//Final result display
 function displayResult() {
   clearInterval(timeInterval);
-  quizContainer.style.display = 'none';
-  submitButton.style.display = 'none';
-  retryButton.style.display = 'inline-block';
-  showAnswerButton.style.display = 'inline-block';
+  quizContainer.classList.add('hide');
+  quizHeading.classList.add('hide');
+  timerContainer.classList.add('hide');
+  retryButton.classList.remove('hide');
+  showAnswerButton.classList.remove('hide');
   resultContainer.innerHTML = `You scored ${score} out of ${quizQuestions.length}!`;
 }
 
 function retryQuiz() {
   currentQuestion = 0;
   score = 0;
-  timeLeft=420;
-  timerElement.textContent=timeLeft;
+  timeLeft = 420;
   incorrectAnswers = [];
-  quizContainer.style.display = 'block';
-  submitButton.style.display = 'inline-block';
-  retryButton.style.display = 'none';
-  showAnswerButton.style.display = 'none';
+  startContainer.style.display = 'none';
+  quizContainer.classList.remove('hide');
+  quizHeading.classList.remove('hide');
+  timerContainer.classList.remove('hide');
   resultContainer.innerHTML = '';
+  retryButton.classList.add('hide');
+  showAnswerButton.classList.add('hide');
+  nextButton.classList.add('hide');
   displayQuestion();
   startTimer();
 }
 
 function showAnswer() {
-  quizContainer.style.display = 'none';
-  submitButton.style.display = 'none';
-  retryButton.style.display = 'inline-block';
-  showAnswerButton.style.display = 'none';
+  quizContainer.classList.add('hide');
+  nextButton.classList.add('hide');
+  retryButton.classList.remove('hide');
+  showAnswerButton.classList.add('hide');
 
   let incorrectAnswersHtml = '';
   for (let i = 0; i < incorrectAnswers.length; i++) {
     incorrectAnswersHtml += `
       <p>
         <strong>Question:</strong> ${incorrectAnswers[i].question}<br>
-       <span class="incorrect-ans">
+        <span class="incorrect-ans">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
           <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-        </svg> ${incorrectAnswers[i].incorrectAnswer}</span><br>
-
-      <span class="correct-ans">       
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/>
-      </svg> 
-      ${incorrectAnswers[i].correctAnswer} </span>
+        </svg>
+        ${incorrectAnswers[i].incorrectAnswer}</span><br>
+        <span class="correct-ans">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
+          <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/>
+        </svg>
+        ${incorrectAnswers[i].correctAnswer}</span>
       </p>
       <hr/>
     `;
@@ -202,9 +232,15 @@ function showAnswer() {
   `;
 }
 
-submitButton.addEventListener('click', checkAnswer);
+startButton.addEventListener('click', () => {
+  startContainer.style.display = 'none';
+  quizContainer.classList.remove('hide');
+  quizHeading.classList.remove('hide');
+  timerContainer.classList.remove('hide');
+  resultContainer.innerHTML = '';
+  displayQuestion();
+  startTimer();
+});
+
 retryButton.addEventListener('click', retryQuiz);
 showAnswerButton.addEventListener('click', showAnswer);
-
-displayQuestion();
-startTimer();
