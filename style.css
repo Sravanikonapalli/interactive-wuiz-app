@@ -26,9 +26,18 @@ body {
   background-color: rgba(0, 0, 0, 0.6);
   padding: 40px;
   border-radius: 15px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  width: 600px;
 }
-
+@media screen and (max-width:768px) {
+  .start-overlay {
+    width: 400px;
+  }
+}
 .main-heading {
   font-size: 36px;
   margin-bottom: 20px;
